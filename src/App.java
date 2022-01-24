@@ -2,68 +2,44 @@ package src;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
-import jflex.Main;
-import src.models.Token;
+import java_cup.runtime.Symbol;
 
 public class App {
     public static String path = "data" + File.separatorChar;
 
     public static void main(String[] args) throws Exception {
-        // move the result to src path
-        // only execute this once
-        // generateFile();
+        String content = Files.readString(Path.of(path + "code.jcr"), StandardCharsets.UTF_8);
 
+        System.out.println("ENTRADA:\n " + content + "\n");
+
+        String code = "<persona>" +
+                "\n <nombre>" +
+                "\n Luis" +
+                "\n </nombre>" +
+                "\n <apellido>" +
+                "\n Rojas" +
+                "\n </apellido>" +
+                "\n <edad>" +
+                "\n 18" +
+                "\n </edad>" +
+                "\n </persona>";
+
+        Syntax syntax = new Syntax(new LexerCup(new StringReader(content)));
+        Symbol aux = null;
         try {
-            Lexer lexer = new Lexer(new FileReader(path + "code.jcr"));
-            String result = "";
-
-            while (true) {
-                Token token = lexer.yylex();
-                if (token == null) {
-                    result += "END";
-                    break;
-                }
-
-                switch (token) {
-                    case ERROR:
-                        result += lexer.lexeme + "\t NO RECOGNIZED SYMBOL";
-                        break;
-                    case CADENA:
-                        result += lexer.lexeme + "\t CADENA";
-                        break;
-                    case ENTERO:
-                        result += lexer.lexeme + "\t ENTERO";
-                        break;
-                    case SIGNO_MAYOR:
-                        result += lexer.lexeme + "\t SIGNO_MAYOR";
-                        break;
-                    case SIGNO_MENOR:
-                        result += lexer.lexeme + "\t SIGNO_MENOR";
-                        break;
-                    case SLASH:
-                        result += lexer.lexeme + "\t SLASH";
-                        break;
-
-                    default:
-                        break;
-                }
-
-                System.out.println(result);
-                result = "";
-            }
-
+            aux = syntax.parse();
+            System.out.println("The code has been successfully executed");
         } catch (Exception e) {
-            System.out.println("ERROR\n" + e.toString());
-        }
-    }
+            System.out.println("ERROR:\n" + e.toString());
+            Symbol sym = syntax.getS();
+            System.out.println("Syntax error in the line " + (sym.right + 1) + " column " + (sym.left + 1)
+                    + "; Wrong syntax: " + sym.value);
 
-    public static void generateFile() {
-        try {
-            String[] files = { (path + "Lexer.flex") };
-            Main.generate(files);
-        } catch (Exception e) {
-            System.out.println("Error generating file.");
         }
     }
 }

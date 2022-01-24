@@ -1,30 +1,43 @@
 package src;
-import src.models.Token;
-
+import java_cup.runtime.Symbol;
 %%
-%class Lexer
-%type Token
-D= 0 | [1-9][0-9]*
-space=[ ,\t,\r,\n]+
-Identifier= [a-zA-Z\_\-0-9]*
-
+%class LexerCup
+%type java_cup.runtime.Symbol
+%cup
+%full
+%line
+%char
+Letters=[a-zA-Z\_\-0-9]*
+Digits=([0-9]+\.?[0-9]*|\.[0-9]+)
+Space=[ ,\t,\r,\n]+
 %{
-    public String lexeme;
+    private Symbol symbol(int type, Object value) {
+        return new Symbol(type, yyline, yycolumn, value);
+    }
+    private Symbol symbol(int type) {
+        return new Symbol(type, yyline, yycolumn);
+    }
 %}
 %%
-{space} {/*Ignore*/}
-"//".* {/*Ignore*/}
+/* Spaces */
+{Space} {/*ignore*/}
+
+/* Comments */
+("//"(.)*) {/*ignore*/}
+
+/* Symbols */
+("<") {return new Symbol(sym.SIGNO_MENOR, yychar, yyline, yytext());}
+(">") {return new Symbol(sym.SIGNO_MAYOR, yychar, yyline, yytext());}
+("/") {return new Symbol(sym.SIGNO_SLASH, yychar, yyline, yytext());}
 
  /* Numbers */
-{D}+ {lexeme=yytext(); return Token.ENTERO;}
+("(-"{Digits}+")")|{Digits}+ {return new Symbol(sym.NUMERO, yychar, yyline, yytext());}
 
  /* Identifiers */
-{Identifier} {lexeme=yytext(); return Token.CADENA;}
+{Letters}({Letters}|{Digits})* {return new Symbol(sym.IDENTIFICADOR, yychar, yyline, yytext());}
 
- /* Arithmetic operators */
-">" {lexeme=yytext(); return Token.SIGNO_MAYOR;}
-"<" {lexeme=yytext(); return Token.SIGNO_MENOR;}
-"/" {lexeme=yytext(); return Token.SLASH;}
+/* String */
+{Letters} {return new Symbol(sym.CADENA, yychar, yyline, yytext());}
 
  /* Default Error */
- . {lexeme=yytext(); return Token.ERROR;}
+. {return new Symbol(sym.ERROR, yychar, yyline, yytext());}

@@ -1,2 +1,5 @@
-<nombre>Elsa</nombre>
-<fecha-de-macimiento>12</fecha-de-macimiento>
+<persona>
+    <nombre>Elsa</nombre>
+    <apellido>Torres</apellido>
+    <edad>24</edad>
+</persona>

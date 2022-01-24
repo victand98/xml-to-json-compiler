@@ -1,0 +1,30 @@
+package src;
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+
+    public void syntax_error (Symbol s){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        return this.s;
+    }
+
+:};
+
+terminal SIGNO_MENOR, SIGNO_MAYOR, SIGNO_SLASH, NUMERO, IDENTIFICADOR, CADENA, ERROR;
+
+non terminal START, SENTENCE, DECLARATION, ETIQUETA;
+
+start with START;
+
+START ::= ETIQUETA;
+
+SENTENCE ::= DECLARATION | SENTENCE DECLARATION;
+
+DECLARATION ::= NUMERO | CADENA | IDENTIFICADOR | ETIQUETA;
+
+ETIQUETA ::= SIGNO_MENOR IDENTIFICADOR SIGNO_MAYOR SENTENCE SIGNO_MENOR SIGNO_SLASH IDENTIFICADOR SIGNO_MAYOR;
