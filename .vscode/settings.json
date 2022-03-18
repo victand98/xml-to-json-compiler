@@ -1,4 +1,12 @@
 {
-    "java.project.sourcePaths": ["src"],
-    "java.project.outputPath": "bin"
+  "java.project.sourcePaths": ["src"],
+  "java.project.outputPath": "bin",
+  "java.project.referencedLibraries": [
+    "lib/**/*.jar",
+    "/home/victor/Downloads/Recursos didácticos-20220317/jflex-1.6.1.jar",
+    "/home/victor/Downloads/Recursos didácticos-20220317/ant-launcher-1.7.0.jar",
+    "/home/victor/Downloads/Recursos didácticos-20220317/ant-1.7.0.jar",
+    "/home/victor/Downloads/Recursos didácticos-20220317/java_cup.jar",
+    "/home/victor/Downloads/Recursos didácticos-20220317/java-cup-11a.jar"
+  ]
 }

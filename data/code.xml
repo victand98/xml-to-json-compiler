@@ -1,0 +1,12 @@
+<persona>
+    <nombre>
+        <primer-nombre>Elsa</primer-nombre>
+        <segundo-nombre>Patricia</segundo-nombre>
+    </nombre>
+    <nombre>
+        <primer-nombre>Elsa</primer-nombre>
+        <segundo-nombre>Patricia</segundo-nombre>
+    </nombre>
+    <apellido>Torres</apellido>
+    <edad>24</edad>
+</persona>

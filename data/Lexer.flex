@@ -1,6 +1,6 @@
-package src;
 import java_cup.runtime.Symbol;
 %%
+%public
 %class LexerCup
 %type java_cup.runtime.Symbol
 %cup
@@ -8,6 +8,7 @@ import java_cup.runtime.Symbol;
 %line
 %char
 Letters=[a-zA-Z\_\-0-9]*
+LettersString=[a-zA-Z\_\-0-9\s]*
 Digits=([0-9]+\.?[0-9]*|\.[0-9]+)
 Space=[ ,\t,\r,\n]+
 %{
@@ -26,18 +27,60 @@ Space=[ ,\t,\r,\n]+
 ("//"(.)*) {/*ignore*/}
 
 /* Symbols */
-("<") {return new Symbol(sym.SIGNO_MENOR, yychar, yyline, yytext());}
-(">") {return new Symbol(sym.SIGNO_MAYOR, yychar, yyline, yytext());}
-("/") {return new Symbol(sym.SIGNO_SLASH, yychar, yyline, yytext());}
+("<") {
+    TablaSimbolos.addArrayList("SIGNO_MENOR");
+    TablaSimbolos.addArrayList2(yytext());
+    TablaSimbolos.addArrayList3(yyline + 1);
+    TablaSimbolos.addArrayList4(yycolumn + 1);
+    return new Symbol(sym.SIGNO_MENOR, yychar, yyline, yytext());
+}
+(">") {
+    TablaSimbolos.addArrayList("SIGNO_MAYOR");
+    TablaSimbolos.addArrayList2(yytext());
+    TablaSimbolos.addArrayList3(yyline + 1);
+    TablaSimbolos.addArrayList4(yycolumn + 1);
+    return new Symbol(sym.SIGNO_MAYOR, yychar, yyline, yytext());
+}
+("/") {
+    TablaSimbolos.addArrayList("SIGNO_SLASH");
+    TablaSimbolos.addArrayList2(yytext());
+    TablaSimbolos.addArrayList3(yyline + 1);
+    TablaSimbolos.addArrayList4(yycolumn + 1);
+    return new Symbol(sym.SIGNO_SLASH, yychar, yyline, yytext());
+}
 
  /* Numbers */
-("(-"{Digits}+")")|{Digits}+ {return new Symbol(sym.NUMERO, yychar, yyline, yytext());}
+("(-"{Digits}+")")|{Digits}+ {
+    TablaSimbolos.addArrayList("NUMERO");
+    TablaSimbolos.addArrayList2(yytext());
+    TablaSimbolos.addArrayList3(yyline + 1);
+    TablaSimbolos.addArrayList4(yycolumn + 1);
+    return new Symbol(sym.NUMERO, yychar, yyline, yytext());
+}
 
  /* Identifiers */
-{Letters}({Letters}|{Digits})* {return new Symbol(sym.IDENTIFICADOR, yychar, yyline, yytext());}
+{Letters}({Letters}|{Digits})* {
+    TablaSimbolos.addArrayList("IDENTIFICADOR");
+    TablaSimbolos.addArrayList2(yytext());
+    TablaSimbolos.addArrayList3(yyline + 1);
+    TablaSimbolos.addArrayList4(yycolumn + 1);
+    return new Symbol(sym.IDENTIFICADOR, yychar, yyline, yytext());
+}
 
 /* String */
-{Letters} {return new Symbol(sym.CADENA, yychar, yyline, yytext());}
+{LettersString} {
+    TablaSimbolos.addArrayList("CADENA");
+    TablaSimbolos.addArrayList2(yytext());
+    TablaSimbolos.addArrayList3(yyline + 1);
+    TablaSimbolos.addArrayList4(yycolumn + 1);
+    return new Symbol(sym.CADENA, yychar, yyline, yytext());
+}
 
  /* Default Error */
-. {return new Symbol(sym.ERROR, yychar, yyline, yytext());}
+. {
+    TablaSimbolos.addArrayList("ERROR");
+    TablaSimbolos.addArrayList2(yytext());
+    TablaSimbolos.addArrayList3(yyline + 1);
+    TablaSimbolos.addArrayList4(yycolumn + 1);
+    return new Symbol(sym.ERROR, yychar, yyline, yytext());
+}

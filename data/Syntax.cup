@@ -1,5 +1,7 @@
-package src;
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
+import helpers.Utils;
+import models.Variable;
 
 parser code
 {:
@@ -15,16 +17,31 @@ parser code
 
 :};
 
+action code
+{:
+    public ArrayList<Variable> variables = new ArrayList<Variable>();
+:};
+
+
 terminal SIGNO_MENOR, SIGNO_MAYOR, SIGNO_SLASH, NUMERO, IDENTIFICADOR, CADENA, ERROR;
 
-non terminal START, SENTENCE, DECLARATION, ETIQUETA;
+non terminal START, ETIQUETA, ETIQUETAS;
 
 start with START;
 
 START ::= ETIQUETA;
 
-SENTENCE ::= DECLARATION | SENTENCE DECLARATION;
+ETIQUETAS ::= ETIQUETA | ETIQUETAS ETIQUETA;
 
-DECLARATION ::= NUMERO | CADENA | IDENTIFICADOR | ETIQUETA;
-
-ETIQUETA ::= SIGNO_MENOR IDENTIFICADOR SIGNO_MAYOR SENTENCE SIGNO_MENOR SIGNO_SLASH IDENTIFICADOR SIGNO_MAYOR;
+ETIQUETA ::= SIGNO_MENOR IDENTIFICADOR:identificador SIGNO_MAYOR NUMERO:valor SIGNO_MENOR SIGNO_SLASH IDENTIFICADOR SIGNO_MAYOR{:
+    variables = Utils.addVariables(variables, valor.toString(), identificador.toString());
+:}
+| SIGNO_MENOR IDENTIFICADOR:identificador SIGNO_MAYOR CADENA:valor SIGNO_MENOR SIGNO_SLASH IDENTIFICADOR SIGNO_MAYOR{:
+    variables = Utils.addVariables(variables, valor.toString(), identificador.toString());
+:}
+| SIGNO_MENOR IDENTIFICADOR:identificador SIGNO_MAYOR IDENTIFICADOR:valor SIGNO_MENOR SIGNO_SLASH IDENTIFICADOR SIGNO_MAYOR{:
+    variables = Utils.addVariables(variables, valor.toString(), identificador.toString());
+:}
+| SIGNO_MENOR IDENTIFICADOR:identificador SIGNO_MAYOR ETIQUETAS:valor SIGNO_MENOR SIGNO_SLASH IDENTIFICADOR SIGNO_MAYOR{:
+    variables = Utils.addVariables(variables, null, identificador.toString());
+:};
