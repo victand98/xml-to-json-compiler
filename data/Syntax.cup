@@ -1,3 +1,5 @@
+package syntactic;
+
 import java_cup.runtime.Symbol;
 import java.util.ArrayList;
 import helpers.Utils;

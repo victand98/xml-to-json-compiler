@@ -18,19 +18,24 @@ public class CreateFile {
             java_cup.Main.main(pathCup);
 
             Path syn = Paths.get(System.getProperty("user.dir") + File.separatorChar + "src" + File.separatorChar
+                    + "syntactic" + File.separatorChar
                     + "sym.java");
             if (Files.exists(syn))
                 Files.delete(syn);
 
             Files.move(Paths.get(System.getProperty("user.dir") + File.separatorChar + "sym.java"), syn);
-            syn = Paths.get(System.getProperty("user.dir") + File.separatorChar + "src" + File.separatorChar
-                    + "Syntax.java");
+            syn = Paths
+                    .get(System.getProperty("user.dir") + File.separatorChar + "src" + File.separatorChar + "syntactic"
+                            + File.separatorChar
+                            + "Syntax.java");
             if (Files.exists(syn))
                 Files.delete(syn);
 
             Files.move(Paths.get(System.getProperty("user.dir") + File.separatorChar + "Syntax.java"), syn);
-            syn = Paths.get(System.getProperty("user.dir") + File.separatorChar + "src" + File.separatorChar
-                    + "LexerCup.java");
+            syn = Paths
+                    .get(System.getProperty("user.dir") + File.separatorChar + "src" + File.separatorChar + "syntactic"
+                            + File.separatorChar
+                            + "LexerCup.java");
             if (Files.exists(syn))
                 Files.delete(syn);
 

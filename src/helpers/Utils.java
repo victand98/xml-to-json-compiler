@@ -1,6 +1,8 @@
 package helpers;
 
+import java.io.Console;
 import java.util.ArrayList;
+
 import models.Variable;
 
 public class Utils {
@@ -22,41 +24,65 @@ public class Utils {
             String identificador) {
         Variable variable = new Variable();
         variable.setIdentificador(identificador);
-        variable.setValor(transformar(valor));
+        variable.setValor(transformar(valor != null ? valor.trim() : valor));
         variables.add(variable);
         return variables;
     }
 
     public static String toJson(ArrayList<Variable> variables) {
         String json = "{\n";
+        Integer initialIndex = variables.size() - 1;
         Integer subs = 0;
 
-        for (int i = variables.size() - 1; i >= 0; i--) {
+        for (int i = initialIndex; i >= 0; i--) {
             Variable entry = variables.get(i);
-            if (i == variables.size() - 1) {
-                json += "\"" + entry.getIdentificador() + "\"" + ": {\n";
+            Boolean isLastElement = isLastElement(i, 0);
+            Boolean nextIsNull = subs > 1 && isLastElement == false && variables.get(i - 1).getValor() == null;
+            subs = entry.getValor() == null ? subs + 1 : subs;
+
+            if (i == initialIndex) {
+                json += "\"" + entry.getIdentificador() + "\": ";
+                json += getJSONValue(entry.getValor(), isLastElement || nextIsNull);
                 continue;
             }
 
-            if (entry.getValor() == null && subs > 0)
-                json += "\t},\n";
+            json += "\t\"" + entry.getIdentificador() + "\": ";
+            json += getJSONValue(entry.getValor(), isLastElement || nextIsNull);
 
-            json += "\t\"" + entry.getIdentificador() + "\"" + ":";
-            if (entry.getValor() == null) {
-                subs++;
-                json += "{\n";
-            } else {
-                if (entry.getValor().getClass().equals(Integer.class)) {
-                    json += entry.getValor() + ",\n";
-                } else
-                    json += "\"" + entry.getValor() + "\"," + "\n";
+            if (nextIsNull) {
+                json += "\t},\n";
+                subs--;
             }
         }
 
-        if (subs == 1)
+        for (int i = 0; i < subs; i++) {
+            if (i == subs - 1) {
+                json += "}\n";
+                continue;
+            }
             json += "\t}\n";
-        json += "}\n}";
+        }
+
+        json += "}";
 
         return json;
+    }
+
+    static String getJSONValue(Object value, Boolean isLastElement) {
+        if (value == null) {
+            return "{\n";
+        }
+
+        if (value.getClass().equals(Integer.class)) {
+            return value + (isLastElement ? "\n" : ",\n");
+        } else
+            return "\"" + value + "\"" + (isLastElement ? "\n" : ",\n");
+    }
+
+    static Boolean isLastElement(Integer currentIndex, Integer lastIndex) {
+        if (currentIndex == lastIndex)
+            return true;
+
+        return false;
     }
 }

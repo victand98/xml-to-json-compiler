@@ -1,3 +1,5 @@
+package syntactic;
+
 import java_cup.runtime.Symbol;
 %%
 %public
@@ -8,7 +10,7 @@ import java_cup.runtime.Symbol;
 %line
 %char
 Letters=[a-zA-Z\_\-0-9]*
-LettersString=[a-zA-Z\_\-0-9\s]*
+LettersString=[a-zA-ZÁ-ú\_\-0-9\s]*
 Digits=([0-9]+\.?[0-9]*|\.[0-9]+)
 Space=[ ,\t,\r,\n]+
 %{

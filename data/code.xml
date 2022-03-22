@@ -1,12 +1,12 @@
 <persona>
-    <nombre>
-        <primer-nombre>Elsa</primer-nombre>
-        <segundo-nombre>Patricia</segundo-nombre>
-    </nombre>
-    <nombre>
-        <primer-nombre>Elsa</primer-nombre>
-        <segundo-nombre>Patricia</segundo-nombre>
-    </nombre>
-    <apellido>Torres</apellido>
-    <edad>24</edad>
+   <nombre>
+        <primer-nombre>Josselyn</primer-nombre>
+        <segundo-nombre>Paola</segundo-nombre>
+   </nombre>
+   <direccion>
+        <direccion-1>direccion 1</direccion-1>
+        <direccion-2>direccion 2</direccion-2>
+   </direccion>
+   <apellido>Guazha</apellido>
+   <edad>23</edad>
 </persona>

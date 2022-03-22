@@ -22,6 +22,6 @@ public class Variable {
 
     @Override
     public String toString() {
-        return "identificador:\t" + identificador + "\tValor:\t" + valor;
+        return "Identificador: " + identificador + "\t|\tValor: " + valor;
     }
 }

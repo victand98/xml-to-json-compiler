@@ -1,3 +1,5 @@
+package syntactic;
+
 import java.io.File;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
